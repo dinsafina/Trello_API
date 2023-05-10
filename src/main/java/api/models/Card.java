@@ -1,4 +1,4 @@
-package api;
+package api.models;
 
 public class Card {
     String name;

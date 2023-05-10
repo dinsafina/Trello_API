@@ -1,37 +1,53 @@
-import api.Board;
-import api.BoardList;
-import api.Card;
+import api.TrelloService;
+import api.models.Board;
+import api.models.BoardList;
+import api.models.Card;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import property.PropertyVars;
+import property.Values;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.requestSpecification;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class TrelloTest {
-    private final static String URL = "https://api.trello.com";
-    private final static String KEY = "f9032154a1cb5a5e458423edec037a08";
-    private final static String TOKEN = "65663c8791c2d24b95238ac128db680a1aeb38a0edf891f681b477397e1617d3";
+    private final TrelloService trelloService = new TrelloService();
+//    @Test
+//    public void checkSuccessfulBoardAdd(){
+//        final RequestBody body = new RequestBody();
+//        body.setName("Завтрак");
+//        final Board boardResponse = trelloService.sendPostBoardAdd(body);
+//        Assertions.assertEquals("Завтрак", boardResponse.getName());
+//    }
+static Values values = PropertyVars.getProperty();
+    public static RequestSpecification requestSpecification;
+    public static RequestSpecBuilder requestSpecBuilder;
 
-    private static final RequestSpecification REQ_SPEC =
-            new RequestSpecBuilder()
-                    .setBaseUri(URL)
-                    .setContentType(ContentType.JSON)
-                    .build();
+    @BeforeAll
+    static void beforeClass() {
+        requestSpecBuilder = new RequestSpecBuilder();
+        requestSpecBuilder.setBaseUri((values.getUrl()));
+        requestSpecBuilder.setContentType(ContentType.JSON);
+        requestSpecification = requestSpecBuilder.build();
+    }
     @Test
     public void checkSuccessfulBoardAdd(){
+        //Specifications.installSpecification(Specifications.requestSpec(URL), Specifications.requestSpecOK200());
         Map<String, String> name = new HashMap<>();
         name.put("name", "Завтрак");
         Board boardResponse = given()
-                .spec(REQ_SPEC)
+                .spec(requestSpecification)
                 .body(name)
                 .when()
-                .post("/1/boards/?key=" + KEY + "&token=" + TOKEN)
+                .post("/1/boards/?key=" + values.getUser_key() + "&token=" + values.getUser_token())
                 .then().log().all()
                 .body("name", notNullValue())
                 .extract().as(Board.class);
@@ -43,10 +59,10 @@ public class TrelloTest {
         Map<String, String> name = new HashMap<>();
         name.put("name", "Обед");
         Board boardResponse = given()
-                .spec(REQ_SPEC)
+                .spec(requestSpecification)
                 .body(name)
                 .when()
-                .post("/1/boards/?key=" + KEY + "&token="+ TOKEN)
+                .post("/1/boards/?key=" + values.getUser_key() + "&token="+ values.getUser_token())
                 .then().log().all()
                 .body("name", notNullValue())
                 .extract().as(Board.class);
@@ -55,10 +71,10 @@ public class TrelloTest {
         Map<String, String> idBoard = new HashMap<>();
         idBoard.put("name", "Суп");
         BoardList listResponse = given()
-                .spec(REQ_SPEC)
+                .spec(requestSpecification)
                 .body(idBoard)
                 .when()
-                .post("/1/boards/"+ boardResponse.getId() +"/lists?key="+ KEY+ "&token=" + TOKEN)
+                .post("/1/boards/"+ boardResponse.getId() +"/lists?key="+ values.getUser_key() + "&token=" + values.getUser_token())
                 .then().log().all()
                 .body("name", notNullValue())
                 .extract().as(BoardList.class);
@@ -70,10 +86,10 @@ public class TrelloTest {
         Map<String, String> board = new HashMap<>();
         board.put("name", "Ужин");
         Board boardResponse = given()
-                .spec(REQ_SPEC)
+                .spec(requestSpecification)
                 .body(board)
                 .when()
-                .post("/1/boards/?key=" + KEY + "&token=" + TOKEN)
+                .post("/1/boards/?key=" + values.getUser_key() + "&token=" + values.getUser_token())
                 .then().log().all()
                 .body("name", notNullValue())
                 .extract().as(Board.class);
@@ -83,10 +99,10 @@ public class TrelloTest {
         list.put("name", "Второе");
         list.put("idBoard", boardResponse.getId());
         BoardList listResponse = given()
-                .spec(REQ_SPEC)
+                .spec(requestSpecification)
                 .body(list)
                 .when()
-                .post("/1/lists/?key=" + KEY + "&token=" + TOKEN)
+                .post("/1/lists/?key=" + values.getUser_key() + "&token=" + values.getUser_token())
                 .then().log().all()
                 .body("name", notNullValue())
                 .extract().as(BoardList.class);
@@ -96,10 +112,10 @@ public class TrelloTest {
         card.put("name", "Болоньезе");
         card.put("idList", listResponse.getId());
         Card cardResponse = given()
-                .spec(REQ_SPEC)
+                .spec(requestSpecification)
                 .body(card)
                 .when()
-                .post("/1/cards?key=" + KEY + "&token=" + TOKEN)
+                .post("/1/cards?key=" + values.getUser_key() + "&token=" + values.getUser_token())
                 .then().log().all()
                 .body("name", notNullValue())
                 .extract().as(Card.class);
