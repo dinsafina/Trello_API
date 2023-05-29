@@ -11,16 +11,16 @@ public class Values {
         this.user_token = user_token;
     }
 
-    public static String getUrl() {
+    public String getUrl() {
         return url;
     }
 
-    public static String getUser_key() {
+    public  String getUser_key() {
         return user_key;
     }
 
 
-    public static String getUser_token() {
+    public  String getUser_token() {
         return user_token;
     }
 }

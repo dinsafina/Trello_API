@@ -28,7 +28,7 @@ public class TrelloTest {
         final BoardListRequest boardListRequest = new BoardListRequest();
         String generatedStringList = RandomStringUtils.randomAlphabetic(10);
         boardListRequest.setName(generatedStringList);
-        final BoardListResponse boardListResponse = trelloService.sendPostBoardListAdd(boardListRequest);
+        final BoardListResponse boardListResponse = trelloService.sendPostBoardListAdd(boardListRequest, boardResponse);
         Assertions.assertEquals(generatedStringList, boardListResponse.getName());
     }
 
@@ -43,7 +43,7 @@ public class TrelloTest {
         final BoardListRequest boardListRequest = new BoardListRequest();
         String generatedStringList = RandomStringUtils.randomAlphabetic(10);
         boardListRequest.setName(generatedStringList);
-        final BoardListResponse boardListResponse = trelloService.sendPostBoardListAdd(boardListRequest);
+        final BoardListResponse boardListResponse = trelloService.sendPostBoardListAdd(boardListRequest, boardResponse);
         Assertions.assertEquals(generatedStringList, boardListResponse.getName());
 
         final CardRequest cardRequest = new CardRequest();

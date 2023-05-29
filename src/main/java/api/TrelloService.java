@@ -15,17 +15,17 @@ public class TrelloService {
                 .spec(REQ_SPEC)
                 .body(body)
                 .when()
-                .post("/1/boards/?key=" + values.getUser_key() + "&token=" + Values.getUser_token())
+                .post("/1/boards/?key=" + values.getUser_key() + "&token=" + values.getUser_token())
                 .then().log().all()
                 .extract().as(BoardResponse.class);
     }
 
-    public BoardListResponse sendPostBoardListAdd(BoardListRequest body){
+    public BoardListResponse sendPostBoardListAdd(BoardListRequest body, BoardResponse boardResponse){
         return given()
                 .spec(REQ_SPEC)
                 .body(body)
                 .when()
-                .post("/1/lists/?key=" + Values.getUser_key() + "&token=" + Values.getUser_token())
+                .post( "/1/boards/" + boardResponse + "/lists/?key=" + values.getUser_key() + "&token=" + values.getUser_token())
                 .then().log().all()
                 .extract().as(BoardListResponse.class);
     }
@@ -34,7 +34,7 @@ public class TrelloService {
                 .spec(REQ_SPEC)
                 .body(body)
                 .when()
-                .post("/1/cards?key=" + Values.getUser_key() + "&token=" + Values.getUser_token())
+                .post("/1/cards?key=" + values.getUser_key() + "&token=" + values.getUser_token())
                 .then().log().all()
                 .extract().as(CardResponse.class);
     }
